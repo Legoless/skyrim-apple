@@ -1,0 +1,159 @@
+name: SkyrimIOS
+options:
+  deploymentTarget:
+    iOS: "17.0"
+settings:
+  base:
+    ARCHS: arm64
+    SUPPORTED_PLATFORMS: iphoneos iphonesimulator
+    TARGETED_DEVICE_FAMILY: "1,2"
+    GCC_C_LANGUAGE_STANDARD: c11
+    CLANG_ENABLE_OBJC_ARC: YES
+    ENABLE_BITCODE: NO
+    ENABLE_DEBUG_DYLIB: NO
+    DEAD_CODE_STRIPPING: NO
+    GCC_SYMBOLS_PRIVATE_EXTERN: NO
+    # Keep the existing host Makefile warning set; Xcode otherwise adds a
+    # truncation warning for intentional 64-bit SVC-register handle carriers.
+    GCC_WARN_64_TO_32_BIT_CONVERSION: NO
+    GCC_PREPROCESSOR_DEFINITIONS: ["$(inherited)", "_DARWIN_C_SOURCE=1"]
+    HEADER_SEARCH_PATHS: ["$(inherited)", "${SKYHOST_SOURCE_DIR}", "${SKY_IOS_BUILD_DIR}/generated"]
+    OTHER_CFLAGS: ["$(inherited)", "-Wall", "-Wextra", "-Werror"]
+    PRODUCT_BUNDLE_IDENTIFIER: dev.skyhost.skyrim
+    MARKETING_VERSION: "0.1"
+    CURRENT_PROJECT_VERSION: "1"
+    CODE_SIGN_STYLE: Automatic
+    DEBUG_INFORMATION_FORMAT: dwarf
+    ENABLE_USER_SCRIPT_SANDBOXING: NO
+targets:
+  SkyrimIOS:
+    type: application
+    platform: iOS
+    sources:
+      - path: ${SKYHOST_SOURCE_DIR}/ios
+        excludes: [tests, project.yml, build.py, SkyrimIOS.entitlements, README.md]
+      - ${SKYHOST_SOURCE_DIR}/loader.c
+      - ${SKYHOST_SOURCE_DIR}/gates.c
+      - ${SKYHOST_SOURCE_DIR}/support.c
+      - ${SKYHOST_SOURCE_DIR}/profile.c
+      - ${SKYHOST_SOURCE_DIR}/runtime.c
+      - ${SKYHOST_SOURCE_DIR}/thread.c
+      - ${SKYHOST_SOURCE_DIR}/svc.c
+      - ${SKYHOST_SOURCE_DIR}/crash.c
+      - ${SKYHOST_SOURCE_DIR}/startup.c
+      - ${SKYHOST_SOURCE_DIR}/fs.c
+      - ${SKYHOST_SOURCE_DIR}/net.c
+      - ${SKYHOST_SOURCE_DIR}/account.c
+      - ${SKYHOST_SOURCE_DIR}/bcat.c
+      - ${SKYHOST_SOURCE_DIR}/nfp.c
+      - ${SKYHOST_SOURCE_DIR}/hid.c
+      - ${SKYHOST_SOURCE_DIR}/keyboard.c
+      - ${SKYHOST_SOURCE_DIR}/audio.c
+      - ${SKYHOST_SOURCE_DIR}/audio_backend.c
+      - ${SKYHOST_SOURCE_DIR}/event.c
+      - ${SKYHOST_SOURCE_DIR}/vi.c
+      - ${SKYHOST_SOURCE_DIR}/nvn.c
+      - ${SKYHOST_SOURCE_DIR}/nvn_program.c
+      - ${SKYHOST_SOURCE_DIR}/nvn_metal.m
+      - ${SKYHOST_SOURCE_DIR}/nvn_transfer.m
+      - ${SKYHOST_SOURCE_DIR}/nvn_bc.c
+      - ${SKYHOST_SOURCE_DIR}/input.c
+      - ${SKYHOST_SOURCE_DIR}/input_control.c
+      - ${SKYHOST_SOURCE_DIR}/touch.c
+      - ${SKYHOST_SOURCE_DIR}/nv.c
+      - ${SKYHOST_SOURCE_DIR}/entry.S
+      - ${SKYHOST_SOURCE_DIR}/nvn/nvn_tex.c
+      - ${SKYHOST_SOURCE_DIR}/nvn/nvn_deswizzle.c
+      - ${SKYHOST_SOURCE_DIR}/nvn/nvn_fmt_mtl.c
+      - ${SKY_IOS_BUILD_DIR}/generated/GuestImages.S
+      - path: ${SKY_IOS_BUILD_DIR}/resources/rewrite
+        type: folder
+        buildPhase: resources
+      - path: ${SKY_IOS_BUILD_DIR}/resources/shaders
+        type: folder
+        buildPhase: resources
+    dependencies:
+      - sdk: UIKit.framework
+      - sdk: Foundation.framework
+      - sdk: Metal.framework
+      - sdk: QuartzCore.framework
+      - sdk: AudioToolbox.framework
+      - sdk: AVFAudio.framework
+      - sdk: CoreGraphics.framework
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: ${SKY_IOS_BUNDLE_ID}
+      CODE_SIGN_ENTITLEMENTS: ${SKYHOST_SOURCE_DIR}/ios/SkyrimIOS.entitlements
+      OTHER_LDFLAGS: ["$(inherited)", "-Wl,-segprot,__DMmainW,rw,rw", "-Wl,-segprot,__DMsdkW,rw,rw", '"@$(SKY_AUDIO_LINK_RESPONSE)"']
+      "SKY_AUDIO_LINK_RESPONSE[sdk=iphoneos*]": ${SKYHOST_SOURCE_DIR}/build/audio-renderer-ios/ios-arm64/SkyAudioRenderer.link.rsp
+      "SKY_AUDIO_LINK_RESPONSE[sdk=iphonesimulator*]": ${SKYHOST_SOURCE_DIR}/build/audio-renderer-ios/iossimulator-arm64/SkyAudioRenderer.link.rsp
+    info:
+      path: ${SKY_IOS_BUILD_DIR}/generated/Info.plist
+      properties:
+        CFBundleDisplayName: Skyrim
+        UILaunchScreen: {}
+        UIFileSharingEnabled: true
+        LSSupportsOpeningDocumentsInPlace: true
+        UIRequiresFullScreen: true
+        UIStatusBarHidden: true
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationLandscapeLeft, UIInterfaceOrientationLandscapeRight]
+        UISupportedInterfaceOrientations~ipad: [UIInterfaceOrientationLandscapeLeft, UIInterfaceOrientationLandscapeRight]
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+          UISceneConfigurations:
+            UIWindowSceneSessionRoleApplication:
+              - UISceneConfigurationName: Skyrim
+                UISceneDelegateClassName: SkySceneDelegate
+  ControlsTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - ${SKYHOST_SOURCE_DIR}/ios/tests/TouchControlsTests.m
+    dependencies:
+      - target: SkyrimIOS
+      - sdk: XCTest.framework
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: ${SKY_IOS_BUNDLE_ID}.controls-tests
+      GENERATE_INFOPLIST_FILE: YES
+      TEST_HOST: "$(BUILT_PRODUCTS_DIR)/SkyrimIOS.app/SkyrimIOS"
+      BUNDLE_LOADER: "$(TEST_HOST)"
+  GameControlsUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - ${SKYHOST_SOURCE_DIR}/ios/tests/GameControlsUITests.m
+    dependencies:
+      - target: SkyrimIOS
+      - sdk: XCTest.framework
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: ${SKY_IOS_BUNDLE_ID}.game-controls-ui-tests
+      GENERATE_INFOPLIST_FILE: NO
+      TEST_TARGET_NAME: SkyrimIOS
+    info:
+      path: ${SKY_IOS_BUILD_DIR}/generated/GameControlsUITests-Info.plist
+      properties:
+        SkyGameAppBundleIdentifier: ${SKY_IOS_BUNDLE_ID}
+schemes:
+  SkyrimIOS:
+    build:
+      targets:
+        SkyrimIOS: all
+        ControlsTests: [test]
+    test:
+      config: Debug
+      environmentVariables:
+        SKY_CONTROLS_TEST_MODE: "1"
+      commandLineArguments:
+        --controls-test-mode: true
+      targets:
+        - ControlsTests
+  SkyrimGameControlsSmoke:
+    build:
+      targets:
+        SkyrimIOS: all
+        GameControlsUITests: [test]
+    test:
+      config: Release
+      preferredScreenCaptureFormat: screenshots
+      deleteScreenshotsWhenEachTestSucceeds: false
+      targets:
+        - GameControlsUITests

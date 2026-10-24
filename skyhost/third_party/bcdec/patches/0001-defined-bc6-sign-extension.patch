@@ -1,0 +1,12 @@
+--- a/skyhost/third_party/bcdec/bcdec.h
++++ b/skyhost/third_party/bcdec/bcdec.h
+@@ -466,7 +466,8 @@
+ 
+ /* http://graphics.stanford.edu/~seander/bithacks.html#VariableSignExtend */
+ static int bcdec__extend_sign(int val, int bits) {
+-    return (val << (32 - bits)) >> (32 - bits);
++    /* BC6H uses widths 4..16; both masks fit int without a signed left shift. */
++    return (val & ((1 << (bits - 1)) - 1)) - (val & (1 << (bits - 1)));
+ }
+ 
+ static int bcdec__transform_inverse(int val, int a0, int bits, int isSigned) {

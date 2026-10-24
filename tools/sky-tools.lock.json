@@ -1,0 +1,38 @@
+{
+  "dotnet": {
+    "version": "10.0.401",
+    "url": "https://builds.dotnet.microsoft.com/dotnet/Sdk/10.0.401/dotnet-sdk-10.0.401-osx-arm64.tar.gz",
+    "sha512": "69f64eb00dc045398755c440b152225d544301a345a146a16e86a56a0c52b7c94b2c331520e976dbb821f18d31930aafbd25bb85961e3517e0665414ce0cbcff",
+    "source": "https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/10.0/releases.json"
+  },
+  "hactool": {
+    "version": "1.4.0",
+    "url": "https://codeload.github.com/SciresM/hactool/tar.gz/refs/tags/1.4.0",
+    "sha256": "1373c98ef8c58da42cb1e81b361283955caad0e1b8b5ad389b0ee49b7a21da43",
+    "source": "https://github.com/SciresM/hactool/releases/tag/1.4.0"
+  },
+  "xcodegen": {
+    "version": "2.46.0",
+    "url": "https://github.com/yonaskolb/XcodeGen/releases/download/2.46.0/xcodegen.zip",
+    "sha256": "4d9e34b62172d645eed6457cac13fc222569974098ef4ee9c3368bedf0196806",
+    "source": "https://api.github.com/repos/yonaskolb/XcodeGen/releases/tags/2.46.0"
+  },
+  "python": {
+    "minimum": "3.9",
+    "packages": {
+      "lz4": "4.4.5",
+      "capstone": "5.0.9"
+    },
+    "source": [
+      "https://pypi.org/pypi/lz4/4.4.5/json",
+      "https://pypi.org/pypi/capstone/5.0.9/json"
+    ]
+  },
+  "spirv-cross": {
+    "version": "1.4.363.0",
+    "url": "https://codeload.github.com/KhronosGroup/SPIRV-Cross/tar.gz/refs/tags/vulkan-sdk-1.4.363.0",
+    "sha256": "f708982e88b763ef5b0394ed468fc2c3628f68cdab89f2e7a946cd628c04e721",
+    "commit": "f11ba9f0b21ba8fc15153d50a2a1ae31ab1cf8f7",
+    "source": "https://api.github.com/repos/KhronosGroup/SPIRV-Cross/git/ref/tags/vulkan-sdk-1.4.363.0"
+  }
+}

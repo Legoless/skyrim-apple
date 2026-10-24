@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "route": "B",
+  "stage": "cs",
+  "entry": "main0",
+  "bindings": [
+    {
+      "kind": "support",
+      "arg_id": 0
+    },
+    {
+      "kind": "cbuf",
+      "reg": 0,
+      "arg_id": 1
+    },
+    {
+      "kind": "tex",
+      "reg": 0,
+      "arg_id": 2
+    },
+    {
+      "kind": "samp_tex",
+      "reg": 0,
+      "arg_id": 3
+    },
+    {
+      "kind": "img",
+      "reg": 0,
+      "arg_id": 4
+    }
+  ],
+  "vertex_inputs": [],
+  "threadgroup_size": [
+    8,
+    8,
+    1
+  ]
+}

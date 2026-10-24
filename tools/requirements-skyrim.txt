@@ -1,0 +1,13 @@
+# macOS arm64 wheels; hashes from the pinned PyPI releases.
+# Keep these versions aligned with sky-tools.lock.json.
+lz4==4.4.5 \
+    --hash=sha256:7dc1e1e2dbd872f8fae529acd5e4839efd0b141eaa8ae7ce835a9fe80fbad89f \
+    --hash=sha256:61d0ee03e6c616f4a8b69987d03d514e8896c8b1b7cc7598ad029e5c6aedfd43 \
+    --hash=sha256:6d0bf51e7745484d2092b3a51ae6eb58c3bd3ce0300cf2b2c14f76c536d5697a \
+    --hash=sha256:b424df1076e40d4e884cfcc4c77d815368b7fb9ebcd7e634f937725cd9a8a72a \
+    --hash=sha256:a1acbbba9edbcbb982bc2cac5e7108f0f553aebac1040fbec67a011a45afa1ba \
+    --hash=sha256:c8e71b14938082ebaf78144f3b3917ac715f72d14c076f384a4c062df96f9df6 \
+    --hash=sha256:13254bd78fef50105872989a2dc3418ff09aefc7d0765528adc21646a7288294
+capstone==5.0.9 \
+    --hash=sha256:fc269c5082e17d7f9f265cd6980e2fdc6ab572df913951d76db0357e06b8001d \
+    --hash=sha256:58a874d9a6cb15122135b1385a782e5b54c8a4d9396161b6498465046d2e0442

@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "route": "B",
+  "stage": "vs",
+  "entry": "main0",
+  "bindings": [],
+  "vertex_inputs": [],
+  "threadgroup_size": null
+}

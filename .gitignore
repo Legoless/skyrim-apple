@@ -1,0 +1,12 @@
+# Machine-specific agent instructions stay local
+/AGENTS.local.md
+# Local Xcode derived data
+.iosdd/
+.iosdd_mac/
+.iosdd_*/
+.DS_Store
+# Game files, captures, translated shaders, and runtime data stay local.
+/skyrim-work/
+# User-provided game dump and console keys; keep only the placement guide.
+/inputs/*
+!/inputs/README.md

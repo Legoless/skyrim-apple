@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PublishAot>true</PublishAot>
+    <NativeLib>Shared</NativeLib>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <StripSymbols>true</StripSymbols>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <RestoreLockedMode>true</RestoreLockedMode>
+    <NuGetLockFilePath Condition="'$(RuntimeIdentifier)' != ''">packages.$(RuntimeIdentifier).lock.json</NuGetLockFilePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'ios-arm64' or '$(RuntimeIdentifier)' == 'iossimulator-arm64'">
+    <PublishAotUsingRuntimePack>true</PublishAotUsingRuntimePack>
+    <NativeLib>Static</NativeLib>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="HostAdapters.cs" />
+    <Compile Include="Bridge.cs" />
+    <Compile Include="vendor/**/*.cs" Exclude="vendor/Ryujinx.Audio/Renderer/Server/AudioRendererManager.cs;vendor/Ryujinx.Audio/Renderer/Dsp/AudioProcessor.cs;vendor/Ryujinx.Audio/Renderer/Device/**/*.cs" />
+    <ProjectReference Include="../third_party/ryujinx/src/Ryujinx.Common/Ryujinx.Common.csproj" />
+  </ItemGroup>
+  <!-- NativeAOT 10.0.12 joins Unix linker arguments through a shell without
+       quoting NativeLibrary paths. Keep workspace/cache paths as single args. -->
+  <Target Name="SkyQuoteNativeSharedLibraries" AfterTargets="SetupOSSpecificProps"
+          Condition="'$(RuntimeIdentifier)' == 'osx-arm64' and '$(NativeLib)' == 'Shared'">
+    <ItemGroup>
+      <LinkerArg Remove="@(NativeLibrary)" />
+      <LinkerArg Include="@(NativeLibrary->'&quot;%(Identity)&quot;')" />
+    </ItemGroup>
+  </Target>
+  <!-- Static NativeAOT archives contain the managed object only. The native
+       consumer must also link the SDK-selected bootstrapper/runtime/shims. -->
+  <Target Name="SkyWriteNativeLinkInputs" AfterTargets="Publish"
+          Condition="'$(SkyNativeLinkManifest)' != '' and '$(NativeLib)' == 'Static'">
+    <WriteLinesToFile File="$(SkyNativeLinkManifest).libraries" Lines="@(NativeLibrary)" Overwrite="true" />
+    <WriteLinesToFile File="$(SkyNativeLinkManifest).arguments" Lines="@(LinkerArg)" Overwrite="true" />
+  </Target>
+</Project>

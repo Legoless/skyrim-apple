@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "route": "B",
+  "stage": "vs",
+  "entry": "main0",
+  "bindings": [
+    {
+      "kind": "cbuf",
+      "reg": 0,
+      "arg_id": 0
+    }
+  ],
+  "vertex_inputs": [
+    {
+      "location": 0,
+      "msl_type": "float4"
+    },
+    {
+      "location": 1,
+      "msl_type": "float4"
+    },
+    {
+      "location": 2,
+      "msl_type": "float4"
+    }
+  ],
+  "threadgroup_size": null
+}

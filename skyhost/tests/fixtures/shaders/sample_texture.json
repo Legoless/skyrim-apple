@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "route": "B",
+  "stage": "ps",
+  "entry": "main0",
+  "bindings": [
+    {
+      "kind": "tex",
+      "reg": 0,
+      "arg_id": 0
+    },
+    {
+      "kind": "samp_tex",
+      "reg": 0,
+      "arg_id": 1
+    }
+  ],
+  "vertex_inputs": [],
+  "threadgroup_size": null
+}

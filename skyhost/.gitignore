@@ -1,0 +1,5 @@
+/build/
+/skyhost
+__pycache__/
+tools/dmsh_xlate/bin/
+tools/dmsh_xlate/obj/

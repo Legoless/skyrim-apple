@@ -1,0 +1,39 @@
+{
+  "project": "bcdec",
+  "upstream": "https://github.com/iOrange/bcdec",
+  "commit": "80859ed3b7afb1c527a2a99d70c61457bea72d0c",
+  "version": "0.985",
+  "license": "MIT OR Unlicense",
+  "selected_license": "MIT",
+  "modified": true,
+  "files": {
+    "bcdec.h": {
+      "url": "https://raw.githubusercontent.com/iOrange/bcdec/80859ed3b7afb1c527a2a99d70c61457bea72d0c/bcdec.h",
+      "bytes": 79434,
+      "sha256": "134520764d96f70a27db814173616c89ad85db95fbd3328417c7a8c77e7ca189",
+      "patched_bytes": 79548,
+      "patched_sha256": "3730d36d22eb8d991f04a7185d7514016977220913530ae8d3ca52aa3e1678e3"
+    },
+    "LICENSE": {
+      "url": "https://raw.githubusercontent.com/iOrange/bcdec/80859ed3b7afb1c527a2a99d70c61457bea72d0c/LICENSE",
+      "bytes": 2564,
+      "sha256": "2414c782587f6e96661cb0d19d752432ddecfcc1a221b4cb12bc2253a54dc5ac"
+    }
+  },
+  "integration": "Generic format decoder with recorded BC6H correctness and Xcode warning-compatibility patches; project wrapper and synthetic tests live outside this vendor directory.",
+  "patches": [
+    {
+      "path": "patches/0001-defined-bc6-sign-extension.patch",
+      "sha256": "2dbaa78ece24bd76716e737ea0e279222970fc41a7ee24f9bc89608b74ed6dc6",
+      "description": "Replace undefined signed left-shift sign extension with equivalent masked subtraction for the BC6H 4..16-bit callers. Discovered with the authored signed-HDR vector under UBSan; no sanitizer suppression.",
+      "original_sha256": "134520764d96f70a27db814173616c89ad85db95fbd3328417c7a8c77e7ca189"
+    },
+    {
+      "path": "patches/0002-sequence-xor-swap-statements.patch",
+      "sha256": "e199505f974de2b14b7309777f5bdb47ccf81129b9fc70736c3825780c998e3a",
+      "description": "Split the sequenced XOR-swap comma expression into three statements with identical behavior for Xcode -Werror,-Wcomma compatibility; no warning suppression.",
+      "applies_to_sha256": "5aefcaf9e8cd9dc4f285ae22204d14927257e68a524b1341151ccbda14493939",
+      "result_sha256": "3730d36d22eb8d991f04a7185d7514016977220913530ae8d3ca52aa3e1678e3"
+    }
+  ]
+}

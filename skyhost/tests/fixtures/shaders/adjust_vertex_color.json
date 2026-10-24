@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "route": "B",
+  "stage": "ps",
+  "entry": "main0",
+  "bindings": [
+    {
+      "kind": "cbuf",
+      "reg": 0,
+      "arg_id": 0
+    }
+  ],
+  "vertex_inputs": [],
+  "threadgroup_size": null
+}
