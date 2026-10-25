@@ -17,8 +17,9 @@ Metal graphics. Keyboard and mouse on Mac. Touch controls on iOS.
 | **Keys** | Your console's `prod.keys` file. |
 
 Setup installs its own tools. No Homebrew or update NSP required.
-Only project-authored renderer and test shaders are included.
-Game files, keys, and translated game shaders stay local.
+Only project-authored renderer and test shaders are included: game modules and
+translated Metal shaders must first be built and cached locally into `skyrim-work/`
+before running.
 
 **For iPhone or iPad, also have:**
 
@@ -27,86 +28,61 @@ Game files, keys, and translated game shaders stay local.
 - A signing account and development team configured in Xcode.
 - A trusted, unlocked device with **Developer Mode** enabled.
 
-## Get the source
+## Quickstart (Build, Cache & Run)
+
+**1. Clone the repository.**
 
 ```sh
 git clone https://github.com/Legoless/skyrim-apple.git
 cd skyrim-apple
 ```
 
-Put your cartridge dump and console keys in the repository's `inputs/` folder:
-
-```text
-skyrim-apple/
-  inputs/
-    Skyrim.xci
-    prod.keys
-```
-
-The XCI may have any filename; keep exactly one `.xci` file or split-dump `.xci`
-directory in `inputs/`. For split dumps, keep the numbered parts (`00`, `01`, etc.)
-inside that directory. Everything in `inputs/` except its placement guide is
-ignored by Git. Setup discovers these files automatically, so no paths or prompts
-are needed. Explicit command-line paths still work; if inputs are absent, setup
-prompts in a terminal. See [input placement](inputs/README.md).
-
-## Play on Mac
-
-**1. Set up the game.**
+**2. Run the interactive entry point.**
 
 ```sh
-./setup-skyrim.sh
+./prepare-skyrim.sh
 ```
 
-Split dumps work directly, including `.xci` folders containing `00`, `01`, and so on.
-Setup installs tools, extracts the game, rewrites its modules, rebuilds and verifies
-the shader cache, then builds the host. No separate shader commands are required.
-Later runs verify and reuse the matching cache.
+The script asks for your **cartridge `.xci`** (single file or split-dump folder) and
+**`prod.keys`** (or pre-fills them automatically if placed in [`inputs/`](inputs/README.md)),
+then asks which target to build:
+
+- `1) macos` — Build the macOS host
+- `2) ios-prepare` — Prepare the iOS Release Xcode project
+- `3) ios-deploy` — Prepare, sign, install, sync RomFS, and launch on iPhone/iPad
+- `4) both` — Build the macOS host + prepare the iOS Xcode project
+- `5) all` — Build the macOS host + prepare and deploy to iPhone/iPad
+
+It installs pinned local tools, extracts the cartridge, rewrites `main` and `sdk`,
+rebuilds and verifies the Metal shader cache in `skyrim-work/build/shaders/`, and
+builds or deploys your selected target. Later runs reuse the verified workspace and
+shader cache automatically.
 
 Shader verification currently targets the recorded `v327680` cache. If your
 cartridge produces different shader inputs, setup stops with an error; it does
 not reuse an incompatible cache. Base-cartridge compatibility remains unverified.
 
-**2. Launch.**
+**3. Play or redeploy.**
 
 ```sh
+# Launch on Mac
 ./skyhost/run.sh
+
+# Redeploy to iPhone or iPad (dump and keys are no longer needed once prepared)
+./prepare-skyrim.sh --target ios-deploy
 ```
-
-## Install on iPhone or iPad
-
-**1. Prepare the iOS build.**
-
-```sh
-./setup-skyrim.sh --ios
-```
-
-This also prepares the shader cache automatically; no macOS preparation pass is required.
-
-**2. Install and launch.**
-
-```sh
-./setup-skyrim.sh --deploy-ios
-```
-
-Choose your signing team and bundle ID when prompted.
-Deployment verifies the game files. It backs up saves before installation and checks them before launch.
-
-For later installs, rerun the deploy command with the same bundle ID.
-The dump and keys are only needed during preparation.
 
 <details>
 <summary>Commands without prompts</summary>
 
 ```sh
-# macOS
-./setup-skyrim.sh '/path/to/game.xci' --keys /path/to/prod.keys
+# macOS (add --run to launch immediately)
+./prepare-skyrim.sh '/path/to/game.xci' --keys /path/to/prod.keys --target macos
 
-# iPhone / iPad
-./setup-skyrim.sh '/path/to/game.xci' --keys /path/to/prod.keys --ios \
+# macOS + iPhone / iPad deployment
+./prepare-skyrim.sh '/path/to/game.xci' --keys /path/to/prod.keys \
+  --target all --team YOUR_TEAM_ID --device DEVICE_UDID_OR_NAME \
   --bundle-id your.bundle.id
-./setup-skyrim.sh --deploy-ios --team YOUR_TEAM_ID \
-  --device DEVICE_UDID_OR_NAME --bundle-id your.bundle.id
 ```
 
 </details>
@@ -151,6 +127,7 @@ The private shader cache stays at `skyrim-work/build/shaders/` in this checkout.
 
 | Command | Purpose |
 | --- | --- |
+| `./prepare-skyrim.sh` | Interactive entry point to cache shaders/modules and build or deploy Mac/iOS. |
 | `./setup-skyrim.sh --check` | Check an already-prepared macOS workspace. |
 | `./setup-skyrim.sh --check --ios` | Check an already-prepared iOS workspace. |
 | `./setup-skyrim.sh --tools-only` | Install tools without game files. |

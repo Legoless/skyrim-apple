@@ -21,9 +21,10 @@ inputs/
   prod.keys
 ```
 
-From the repository root, run `./setup-skyrim.sh` for Mac or
-`./setup-skyrim.sh --ios` for iPhone/iPad preparation. Setup finds these inputs
-automatically. Explicit dump paths and `--keys` override this location.
+From the repository root, run `./prepare-skyrim.sh` (to choose Mac, iOS prepare,
+iOS deploy, or all interactively) or `./setup-skyrim.sh` / `./setup-skyrim.sh --ios`.
+Both discover these inputs automatically, or prompt in a terminal if `inputs/` is
+empty. Explicit dump paths and `--keys` override this location.
 
 Everything in this directory except this guide is ignored by Git. Do not force-add
 game files or keys. Setup reads your originals without moving or modifying them;
